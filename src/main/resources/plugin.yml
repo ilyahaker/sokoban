@@ -1,0 +1,4 @@
+name: Sokoban
+version: @version@
+main: io.ilyahaker.sokoban.Sokoban
+api-version: 1.16
