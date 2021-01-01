@@ -1,6 +1,9 @@
 package io.ilyahaker.sokoban.object;
 
-import lombok.Getter;
+import org.bukkit.inventory.ItemStack;
 
-public abstract class GameObject {
+public interface GameObject {
+
+    ItemStack getItem();
+
 }

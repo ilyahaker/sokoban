@@ -1,4 +1,4 @@
 package io.ilyahaker.sokoban.object;
 
-public interface GamePlayer {
+public interface GamePlayer extends GameObject {
 }
