@@ -1,4 +1,4 @@
-gpackage io.ilyahaker.sokoban;
+package io.ilyahaker.sokoban;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
