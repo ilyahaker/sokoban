@@ -58,7 +58,7 @@ public class GameInventory implements InventoryHolder {
         }
     }
 
-    public void inventoryClick(int row, int column) {
+    public void handleClick(int row, int column) {
         int differenceRow = playerPosition.getKey() - row - currentRow,
                 differenceColumn = playerPosition.getValue() - column - currentColumn;
 

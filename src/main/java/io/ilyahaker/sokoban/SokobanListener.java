@@ -33,7 +33,7 @@ public class SokobanListener implements Listener {
         }
 
         GameInventory inventory = (GameInventory) inventoryHolder;
-        inventory.inventoryClick(event.getSlot() / 9, event.getSlot() % 9);
+        inventory.handleClick(event.getSlot() / 9, event.getSlot() % 9);
     }
 
 }
