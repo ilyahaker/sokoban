@@ -17,8 +17,14 @@ public final class Sokoban extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        GameObject[][] objects = new GameObject[5][8];
+        GameObject[][] objects = new GameObject[10][8];
         objects[3][5] = new GameObjectImpl(new ItemStack(Material.WOODEN_AXE)) {
+            @Override
+            public ItemStack getItem() {
+                return super.getItem();
+            }
+        };
+        objects[9][5] = new GameObjectImpl(new ItemStack(Material.WOODEN_AXE)) {
             @Override
             public ItemStack getItem() {
                 return super.getItem();
