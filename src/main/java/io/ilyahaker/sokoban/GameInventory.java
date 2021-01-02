@@ -33,7 +33,7 @@ public class GameInventory implements InventoryHolder {
         this.matrix = matrix;
 
         fillInventory();
-        inventory.setItem((playerPosition.getKey() - currentRow) * 9 + playerPosition.getValue() - currentColumn, new GamePlayerImpl().getItem());
+        fillPlayers();
     }
 
     private void fillInventory() {
@@ -49,20 +49,31 @@ public class GameInventory implements InventoryHolder {
         }
     }
 
+    private void fillPlayers() {
+        inventory.setItem((playerPosition.getKey() - currentRow) * 9 + playerPosition.getValue() - currentColumn, new GamePlayerImpl().getItem());
+    }
+
     public void inventoryClick(int row, int column) {
-        int differenceRow = Math.abs(playerPosition.getKey() - row - currentRow),
-                differenceColumn = Math.abs(playerPosition.getValue() - column - currentColumn);
+        int differenceRow = playerPosition.getKey() - row - currentRow,
+                differenceColumn = playerPosition.getValue() - column - currentColumn;
 
         //inverse XOR operation
-        if ((differenceRow == 1 && differenceColumn == 0) == (differenceColumn == 1 && differenceRow == 0)) {
+        if ((Math.abs(differenceRow) == 1 && Math.abs(differenceColumn) == 0) == (Math.abs(differenceColumn) == 1 && Math.abs(differenceRow) == 0)) {
             return;
         }
 
         Pair<Integer, Integer> currentPlayerPosition = new Pair<>(row + currentRow, column + currentColumn);
-        boolean needFilling = false;
-        if (matrix.length > 6 && matrix.length - currentPlayerPosition.getKey() >= 3) {
+        boolean needFilling = true;
+        if (differenceRow < 0 && matrix.length - currentPlayerPosition.getKey() >= 3 && currentPlayerPosition.getKey() >= 3) {
             currentRow = Math.max(currentPlayerPosition.getKey() - 3, 0);
-            needFilling = true;
+        } else if (differenceRow > 0 && matrix.length - currentPlayerPosition.getKey() >= 4 && currentPlayerPosition.getKey() >= 2) {
+            currentRow = Math.max(currentPlayerPosition.getKey() - 2, 0);
+        } else if (differenceColumn < 0 && matrix[0].length - currentPlayerPosition.getValue() >= 5 && currentPlayerPosition.getValue() >= 4) {
+            currentColumn = Math.max(currentPlayerPosition.getValue() - 4, 0);
+        } else if (differenceColumn > 0 && matrix[0].length - currentPlayerPosition.getValue() >= 5 && currentPlayerPosition.getValue() >= 4) {
+            currentColumn = Math.max(currentPlayerPosition.getValue() - 4, 0);
+        } else {
+            needFilling = false;
         }
 
         if (needFilling) {
@@ -78,6 +89,6 @@ public class GameInventory implements InventoryHolder {
         }
 
         playerPosition = currentPlayerPosition;
-        inventory.setItem((playerPosition.getKey() - currentRow) * 9 + playerPosition.getValue() - currentColumn, new GamePlayerImpl().getItem());
+        fillPlayers();
     }
 }
