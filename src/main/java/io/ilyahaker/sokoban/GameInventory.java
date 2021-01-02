@@ -39,18 +39,23 @@ public class GameInventory implements InventoryHolder {
     private void fillInventory() {
         for (int row = 0; row < 6; row++) {
             for (int column = 0; column < 9; column++) {
-                if (row + currentRow < matrix.length && column + currentColumn < matrix[0].length) {
-                    ItemStack itemStack = matrix[row + currentRow][column + currentColumn] == null ? null : matrix[row + currentRow][column + currentColumn].getItem();
-                    inventory.setItem(row * 9 + column, itemStack);
-                } else {
-                    inventory.setItem(row * 9 + column, null);
-                }
+                setItem(row + currentRow, column + currentColumn);
             }
         }
     }
 
     private void fillPlayers() {
         inventory.setItem((playerPosition.getKey() - currentRow) * 9 + playerPosition.getValue() - currentColumn, new GamePlayerImpl().getItem());
+    }
+
+    private void setItem(int row, int column) {
+        if (row < matrix.length && column < matrix[0].length) {
+            GameObject object = matrix[row][column];
+            ItemStack itemStack = object == null ? null : object.getItem();
+            inventory.setItem((row - currentRow) * 9 + column - currentColumn, itemStack);
+        } else {
+            inventory.setItem((row - currentRow) * 9 + column - currentColumn, null);
+        }
     }
 
     public void inventoryClick(int row, int column) {
@@ -64,6 +69,8 @@ public class GameInventory implements InventoryHolder {
 
         Pair<Integer, Integer> currentPlayerPosition = new Pair<>(row + currentRow, column + currentColumn);
         boolean needFilling = true;
+
+        //changing the starting point depending on player's position
         if (differenceRow < 0 && matrix.length - currentPlayerPosition.getKey() >= 3 && currentPlayerPosition.getKey() >= 3) {
             currentRow = Math.max(currentPlayerPosition.getKey() - 3, 0);
         } else if (differenceRow > 0 && matrix.length - currentPlayerPosition.getKey() >= 4 && currentPlayerPosition.getKey() >= 2) {
@@ -79,13 +86,7 @@ public class GameInventory implements InventoryHolder {
         if (needFilling) {
             fillInventory();
         } else {
-            if (playerPosition.getKey() < matrix.length && playerPosition.getValue() < matrix[0].length) {
-                GameObject object = matrix[playerPosition.getKey()][playerPosition.getValue()];
-                ItemStack itemStack = object == null ? null : object.getItem();
-                inventory.setItem((playerPosition.getKey() - currentRow) * 9 + playerPosition.getValue() - currentColumn, itemStack);
-            } else {
-                inventory.setItem((playerPosition.getKey() - currentRow) * 9 + playerPosition.getValue() - currentColumn, null);
-            }
+            setItem(playerPosition.getKey(), playerPosition.getValue());
         }
 
         playerPosition = currentPlayerPosition;
